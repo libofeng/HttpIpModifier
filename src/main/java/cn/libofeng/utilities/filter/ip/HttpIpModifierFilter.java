@@ -10,7 +10,7 @@ import java.io.IOException;
 public class HttpIpModifierFilter implements Filter {
     private static final String CONFIG_IP_HEADER_NAME_KEY = "ip-header-name";
 
-    private String ipHeaderName = "remote_addr";
+    private String ipHeaderName;
 
     /**
      * Called by the web container to indicate to a filter that it is being placed into
