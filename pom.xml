@@ -34,7 +34,6 @@
     </dependencies>
 
     <build>
-        <finalName>ab-security-filter</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
