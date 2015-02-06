@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * A HttpRequest wrapper to override the "request.getRemoteAddr()" method
  */
 class HttpIpModifierRequestWrapper extends HttpServletRequestWrapper {
+    public static final String MARK_COMMA = ",";
+
     // http header name of holding request ip
     private String ipHeaderName;
 
@@ -21,11 +23,19 @@ class HttpIpModifierRequestWrapper extends HttpServletRequestWrapper {
      */
     @Override
     public String getRemoteAddr() {
-        String ip;
+        // no valid ip header name specified, return default
         if (ipHeaderName == null || ipHeaderName.length() == 0) {
-            ip = super.getRemoteAddr();
-        } else {
-            ip = getHeader(ipHeaderName);
+            return super.getRemoteAddr();
+        }
+
+        String ip = getHeader(ipHeaderName);
+        if (ip != null) {
+            int commaIndex = ip.indexOf(MARK_COMMA);
+            // multiple ip values set by proxies, get the 1st one.
+            // this is based on the format of "client1, proxy1, proxy2,..."
+            if (commaIndex > 0) {
+                ip = ip.substring(0, commaIndex);
+            }
         }
 
         return ip;
